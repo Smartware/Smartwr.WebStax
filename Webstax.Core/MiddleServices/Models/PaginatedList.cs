@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Smartwr.Webstax.lib.MiddleServices.Models
+namespace Smartwr.Webstax.Core.MiddleServices.Models
 {
     public class PaginatedList<T> : List<T>
     {

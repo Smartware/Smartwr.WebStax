@@ -1,12 +1,9 @@
-﻿using Smartwr.Webstax.lib.Infrastructure.Validation;
+﻿using Smartwr.Webstax.Core.Infrastructure.Validation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Smartwr.Webstax.lib.MiddleServices.Models
+namespace Smartwr.Webstax.Core.MiddleServices.Models
 {
     public abstract class BaseEntity
     {

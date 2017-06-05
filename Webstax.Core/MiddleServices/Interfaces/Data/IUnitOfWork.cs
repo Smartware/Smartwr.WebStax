@@ -1,4 +1,4 @@
-﻿using Smartwr.Webstax.lib.MiddleServices.Models;
+﻿using Smartwr.Webstax.Core.MiddleServices.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Smartwr.Webstax.lib.MiddleServices.Interfaces.Data
+namespace Smartwr.Webstax.Core.MiddleServices.Interfaces.Data
 {
     public interface IUnitOfWork : IDisposable
     {

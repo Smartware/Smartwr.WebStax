@@ -1,11 +1,11 @@
-﻿using Smartwr.Webstax.lib.MiddleServices.Models.Auth;
+﻿using Smartwr.Webstax.Core.MiddleServices.Models.Auth;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Smartwr.Webstax.lib.MiddleServices.Interfaces.Auth
+namespace Smartwr.Webstax.Core.MiddleServices.Interfaces.Auth
 {
     public interface IApplicationRoleManager : IDisposable
     {

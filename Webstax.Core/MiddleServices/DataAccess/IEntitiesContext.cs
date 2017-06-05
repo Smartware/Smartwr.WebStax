@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Smartwr.Webstax.lib.MiddleServices.Models;
+using Smartwr.Webstax.Core.MiddleServices.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +7,12 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Smartwr.Webstax.lib.MiddleServices.DataAccess
+namespace Smartwr.Webstax.Core.MiddleServices.DataAccess
 {
     public interface IEntitiesContext : IDisposable
     {
+        IEnumerable<TElement> FromSql<TElement>(string sql, params object[] parameters);
+
         string CreateDatabaseScript();
         /// <summary>
         /// Execute stores procedure and load a list of entities at the end

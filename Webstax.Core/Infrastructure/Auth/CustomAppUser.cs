@@ -5,7 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Smartwr.Webstax.lib.Infrastructure.Auth
+namespace Smartwr.Webstax.Core.Infrastructure.Auth
 {
     public class CustomAppUser : ClaimsPrincipal
     {

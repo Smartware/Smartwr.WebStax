@@ -1,6 +1,6 @@
-﻿using Smartwr.Webstax.lib.MiddleServices.Enumerations;
-using Smartwr.Webstax.lib.MiddleServices.Interfaces.Data;
-using Smartwr.Webstax.lib.MiddleServices.Models;
+﻿using Smartwr.Webstax.Core.MiddleServices.Enumerations;
+using Smartwr.Webstax.Core.MiddleServices.Interfaces.Data;
+using Smartwr.Webstax.Core.MiddleServices.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,7 +9,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Smartwr.Webstax.lib.MiddleServices.Services
+namespace Smartwr.Webstax.Core.MiddleServices.Services
 {
     public class Service<TEntity> : IService<TEntity> where TEntity : BaseEntity
     {

@@ -1,17 +1,17 @@
-﻿using Smartwr.Webstax.lib.MiddleServices.DataAccess;
-using Smartwr.Webstax.lib.MiddleServices.Enumerations;
-using Smartwr.Webstax.lib.MiddleServices.Interfaces.Data;
-using Smartwr.Webstax.lib.MiddleServices.Models;
+﻿using Smartwr.Webstax.Core.MiddleServices.DataAccess;
+using Smartwr.Webstax.Core.MiddleServices.Enumerations;
+using Smartwr.Webstax.Core.MiddleServices.Interfaces.Data;
+using Smartwr.Webstax.Core.MiddleServices.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using Smartwr.Webstax.lib.MiddleServices.Extensions;
+using Smartwr.Webstax.Core.MiddleServices.Extensions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Smartwr.Webstax.lib.MiddleServices.Repository
+namespace Smartwr.Webstax.Core.MiddleServices.Repository
 {
     public class EntityRepository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
     {

@@ -1,26 +1,25 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Smartwr.Webstax.lib.Infrastructure.Logging;
-using Smartwr.Webstax.lib.MiddleServices.Configuration;
-using Smartwr.Webstax.lib.MiddleServices.Models;
+using Smartwr.Webstax.Core.Infrastructure.Logging;
+using Smartwr.Webstax.Core.MiddleServices.Configuration;
+using Smartwr.Webstax.Core.MiddleServices.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Smartwr.Webstax.lib.MiddleServices.DataAccess
+namespace Smartwr.Webstax.Core.MiddleServices.DataAccess
 {
-    public partial class ApplicationDbContext : DbContext, IEntitiesContext
+    public partial class AppDbContext : DbContext, IEntitiesContext
     {
         private DbTransaction _transaction;
         private static readonly object Lock = new object();
         private static bool _databaseInitialized;
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
             if (_databaseInitialized)
@@ -37,6 +36,11 @@ namespace Smartwr.Webstax.lib.MiddleServices.DataAccess
                     _databaseInitialized = true;
                 }
             }
+        }
+
+        public IEnumerable<TElement> FromSql<TElement>(string sql, params object[] parameters)
+        {
+            return this.FromSql<TElement>(sql, parameters);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -212,12 +216,10 @@ namespace Smartwr.Webstax.lib.MiddleServices.DataAccess
         /// <returns>The result returned by the database after executing the command.</returns>
         public int ExecuteSqlCommand(string sql, int? timeout = null, params object[] parameters)
         {
-           
             var result = this.Database.ExecuteSqlCommand(sql, parameters);
-
-           
-            //return result
             return result;
         }
+
+       
     }
 }

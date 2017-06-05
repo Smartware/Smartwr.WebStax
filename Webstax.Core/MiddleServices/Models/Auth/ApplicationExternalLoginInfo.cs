@@ -5,7 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Smartwr.Webstax.lib.MiddleServices.Models.Auth
+namespace Smartwr.Webstax.Core.MiddleServices.Models.Auth
 {
     public class ApplicationExternalLoginInfo
     {

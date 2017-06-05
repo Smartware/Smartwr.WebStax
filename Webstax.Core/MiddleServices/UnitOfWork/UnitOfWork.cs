@@ -1,7 +1,7 @@
-﻿using Smartwr.Webstax.lib.MiddleServices.DataAccess;
-using Smartwr.Webstax.lib.MiddleServices.Interfaces.Data;
-using Smartwr.Webstax.lib.MiddleServices.Models;
-using Smartwr.Webstax.lib.MiddleServices.Repository;
+﻿using Smartwr.Webstax.Core.MiddleServices.DataAccess;
+using Smartwr.Webstax.Core.MiddleServices.Interfaces.Data;
+using Smartwr.Webstax.Core.MiddleServices.Models;
+using Smartwr.Webstax.Core.MiddleServices.Repository;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Smartwr.Webstax.lib.MiddleServices.UnitOfWork
+namespace Smartwr.Webstax.Core.MiddleServices.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {

@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Smartwr.Webstax.lib.MiddleServices.Configuration
+namespace Smartwr.Webstax.Core.MiddleServices.Configuration
 {
     public class EfConfig
     {

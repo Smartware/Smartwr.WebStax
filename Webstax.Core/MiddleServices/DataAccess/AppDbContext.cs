@@ -16,15 +16,12 @@ using System.Threading.Tasks;
 
 namespace Smartwr.Webstax.Core.MiddleServices.DataAccess
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : DbContext, IDbContextFactory<AppDbContext>
     {
         private DbTransaction _transaction;
         private static readonly object Lock = new object();
 
 
-        public AppDbContext()
-        {
-        }
         public AppDbContext(DbContextOptions<DbContext> options)
             : base(options)
         {

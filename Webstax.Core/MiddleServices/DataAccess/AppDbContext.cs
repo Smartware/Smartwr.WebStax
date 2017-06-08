@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.Configuration;
 using Smartwr.Webstax.Core.Infrastructure.Logging;
 using Smartwr.Webstax.Core.MiddleServices.Configuration;
 using Smartwr.Webstax.Core.MiddleServices.Models;
@@ -7,35 +9,40 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Smartwr.Webstax.Core.MiddleServices.DataAccess
 {
-    public partial class AppDbContext : DbContext, IEntitiesContext
+    public class AppDbContext : DbContext
     {
         private DbTransaction _transaction;
         private static readonly object Lock = new object();
-        private static bool _databaseInitialized;
 
-        public AppDbContext(DbContextOptions<AppDbContext> options)
+
+        public AppDbContext()
+        {
+        }
+        public AppDbContext(DbContextOptions<DbContext> options)
             : base(options)
         {
-            if (_databaseInitialized)
-            {
-                return;
-            }
-            lock (Lock)
-            {
-                if (!_databaseInitialized)
-                {
-                    // Set the database intializer which is run once during application start
-                    // This seeds the database with admin user credentials and admin role
-                    //this.(new ApplicationDbInitializer());
-                    _databaseInitialized = true;
-                }
-            }
+        }
+
+        public AppDbContext Create(DbContextFactoryOptions options)
+        {
+            // Used only for EF .NET Core CLI tools (update database/migrations etc.)
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Path.Combine(Directory.GetCurrentDirectory()))
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+            var config = builder.Build();
+
+            var optionsBuilder = new DbContextOptionsBuilder<DbContext>()
+                .UseSqlServer(config.GetConnectionString("AppDbContext"));
+
+            return new AppDbContext(optionsBuilder.Options);
         }
 
         public IEnumerable<TElement> FromSql<TElement>(string sql, params object[] parameters)
@@ -45,7 +52,6 @@ namespace Smartwr.Webstax.Core.MiddleServices.DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
             EfConfig.ConfigureEf(modelBuilder);
         }
         

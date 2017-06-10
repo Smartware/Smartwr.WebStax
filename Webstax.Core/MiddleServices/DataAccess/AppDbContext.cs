@@ -1,45 +1,31 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
-using Smartwr.Webstax.Core.Infrastructure.Logging;
-using Smartwr.Webstax.Core.MiddleServices.Configuration;
 using Smartwr.Webstax.Core.MiddleServices.Models;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.IO;
 using System.Linq;
-using System.Text;
+using System.IO;
+using System;
+using Smartwr.Webstax.Core.MiddleServices.Configuration;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Smartwr.Webstax.Core.MiddleServices.DataAccess
 {
-    public class AppDbContext : DbContext, IDbContextFactory<AppDbContext>
+    public abstract class AppDbContext : DbContext, IEntitiesContext
     {
         private DbTransaction _transaction;
-        private static readonly object Lock = new object();
+        //private static readonly object Lock = new object();
 
+        public AppDbContext()
+        {
 
+        }
         public AppDbContext(DbContextOptions<DbContext> options)
             : base(options)
         {
-        }
-
-        public AppDbContext Create(DbContextFactoryOptions options)
-        {
-            // Used only for EF .NET Core CLI tools (update database/migrations etc.)
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Path.Combine(Directory.GetCurrentDirectory()))
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-
-            var config = builder.Build();
-
-            var optionsBuilder = new DbContextOptionsBuilder<DbContext>()
-                .UseSqlServer(config.GetConnectionString("AppDbContext"));
-
-            return new AppDbContext(optionsBuilder.Options);
         }
 
         public IEnumerable<TElement> FromSql<TElement>(string sql, params object[] parameters)
@@ -47,11 +33,6 @@ namespace Smartwr.Webstax.Core.MiddleServices.DataAccess
             return this.FromSql<TElement>(sql, parameters);
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            EfConfig.ConfigureEf(modelBuilder);
-        }
-        
         public new DbSet<TEntity> Set<TEntity>() where TEntity : BaseEntity
         {
             return base.Set<TEntity>();
@@ -123,7 +104,7 @@ namespace Smartwr.Webstax.Core.MiddleServices.DataAccess
             {
                 this.Database.GetDbConnection().Close();
             }
-                
+
             base.Dispose();
         }
 
@@ -223,6 +204,6 @@ namespace Smartwr.Webstax.Core.MiddleServices.DataAccess
             return result;
         }
 
-       
+
     }
 }

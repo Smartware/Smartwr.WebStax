@@ -28,8 +28,14 @@ namespace Smartwr.Webstax.Core.MiddleServices.UnitOfWork
             return _context.SaveChanges();
         }
 
+        public virtual IEnumerable<TEntity> FromSql<TEntity>(String sql, params object[] parameters) where TEntity: BaseEntity, new()
+        {
+            return _context.FromSql<TEntity>(sql, parameters);
+        }
+
         public IRepository<TEntity> Repository<TEntity>() where TEntity : BaseEntity
         {
+            
             if (_repositories == null)
             {
                 _repositories = new Dictionary<String, object>();
@@ -42,7 +48,9 @@ namespace Smartwr.Webstax.Core.MiddleServices.UnitOfWork
             }
 
             var repositoryType = typeof(EntityRepository<>);
-            _repositories.Add(type, Activator.CreateInstance<IRepository<TEntity>>());
+
+            _repositories.Add(type, Activator.CreateInstance(typeof(EntityRepository<>).MakeGenericType(typeof(TEntity)), _context));
+
             return (IRepository<TEntity>)_repositories[type];
         }
 

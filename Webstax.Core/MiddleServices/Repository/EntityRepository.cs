@@ -25,6 +25,8 @@ namespace Smartwr.Webstax.Core.MiddleServices.Repository
             _dbEntitySet = _context.Set<TEntity>();
         }
 
+       
+
         public virtual IEnumerable<TEntity> SqlQuery(String sql, params object[] parameters)
         {
             return _context.SqlQuery<TEntity>(sql, parameters);

@@ -10,6 +10,8 @@ namespace Smartwr.Webstax.Core.MiddleServices.Interfaces.Data
 {
     public interface IUnitOfWork : IDisposable
     {
+        IEnumerable<TEntity> FromSql<TEntity>(String sql, params object[] parameters) 
+            where TEntity : BaseEntity, new();
         int SaveChanges();
         void Dispose(bool disposing);
         IRepository<TEntity> Repository<TEntity>() where TEntity : BaseEntity;

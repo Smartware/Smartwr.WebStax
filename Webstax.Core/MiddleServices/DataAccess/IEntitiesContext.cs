@@ -11,7 +11,8 @@ namespace Smartwr.Webstax.Core.MiddleServices.DataAccess
 {
     public interface IEntitiesContext : IDisposable
     {
-        IEnumerable<TElement> FromSql<TElement>(string sql, params object[] parameters);
+        IEnumerable<TElement> FromSql<TElement>(string sql, params object[] parameters) 
+            where TElement : BaseEntity, new();
 
         string CreateDatabaseScript();
         /// <summary>
@@ -31,7 +32,8 @@ namespace Smartwr.Webstax.Core.MiddleServices.DataAccess
         /// <param name="sql">The SQL query string.</param>
         /// <param name="parameters">The parameters to apply to the SQL query string.</param>
         /// <returns>Result</returns>
-        IEnumerable<TElement> SqlQuery<TElement>(string sql, params object[] parameters);
+        IEnumerable<TElement> SqlQuery<TElement>(string sql, params object[] parameters)
+            where TElement : BaseEntity;
 
         /// <summary>
         /// Executes the given DDL/DML command against the database.

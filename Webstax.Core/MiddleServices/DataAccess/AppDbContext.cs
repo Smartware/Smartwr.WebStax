@@ -11,26 +11,57 @@ using System;
 using Smartwr.Webstax.Core.MiddleServices.Configuration;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Smartwr.Webstax.Core.MiddleServices.Extensions;
 
 namespace Smartwr.Webstax.Core.MiddleServices.DataAccess
 {
-    public abstract class AppDbContext : DbContext, IEntitiesContext
+    public abstract class AppDbContext : DbContext, IEntitiesContext, IDbContextFactory<DbContext>
     {
         private DbTransaction _transaction;
-        //private static readonly object Lock = new object();
+        public static IConfigurationRoot Configuration { get; set; }
+        public String ConnectionName { get; set; }
 
-        public AppDbContext()
+        static AppDbContext()
         {
+            var builder = new ConfigurationBuilder();
+#if DEBUG
+            builder.AddJsonFile($"appsettings.development.json");
+#else
+             builder.AddJsonFile("appsettings.json");
+#endif
+            Configuration = builder.Build();
+
 
         }
-        public AppDbContext(DbContextOptions<DbContext> options)
+
+        public AppDbContext(String connectionName)
+        {
+            ConnectionName = connectionName;
+
+            this.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+        }
+
+
+        public AppDbContext(DbContextOptions<DbContext> options, String connectionName)
             : base(options)
         {
+            ConnectionName = connectionName;
+            this.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
-        public IEnumerable<TElement> FromSql<TElement>(string sql, params object[] parameters)
+        public DbContext Create(DbContextFactoryOptions options)
         {
-            return this.FromSql<TElement>(sql, parameters);
+            var optionsBuilder = new DbContextOptionsBuilder<DbContext>()
+                .UseSqlServer(Configuration.GetConnectionString(ConnectionName));
+
+            return new DbContext(optionsBuilder.Options);
+        }
+
+
+
+        public IEnumerable<TElement> FromSql<TElement>(string sql, params object[] parameters) where TElement : BaseEntity, new()
+        {
+            return this.Database.GetModelFromQuery<TElement>(sql, parameters);
         }
 
         public new DbSet<TEntity> Set<TEntity>() where TEntity : BaseEntity
@@ -100,10 +131,10 @@ namespace Smartwr.Webstax.Core.MiddleServices.DataAccess
 
         public override void Dispose()
         {
-            if (this.Database.GetDbConnection() != null && this.Database.GetDbConnection().State == ConnectionState.Open)
-            {
-                this.Database.GetDbConnection().Close();
-            }
+            //if (this.Database.GetDbConnection() != null && this.Database.GetDbConnection().State == ConnectionState.Open)
+            //{
+            //    this.Database.GetDbConnection().Close();
+            //}
 
             base.Dispose();
         }
@@ -185,9 +216,9 @@ namespace Smartwr.Webstax.Core.MiddleServices.DataAccess
         /// <param name="sql">The SQL query string.</param>
         /// <param name="parameters">The parameters to apply to the SQL query string.</param>
         /// <returns>Result</returns>
-        public IEnumerable<TElement> SqlQuery<TElement>(string sql, params object[] parameters)
+        public IEnumerable<TElement> SqlQuery<TElement>(string sql, params object[] parameters) where TElement : BaseEntity
         {
-            return this.SqlQuery<TElement>(sql, parameters);
+            return base.Set<TElement>().FromSql<TElement>(sql, parameters).AsEnumerable();
         }
 
         /// <summary>

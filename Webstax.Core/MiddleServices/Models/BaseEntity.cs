@@ -15,12 +15,8 @@ namespace Smartwr.Webstax.Core.MiddleServices.Models
 
         public int Id { get; set; }
         public Int32 CreatedBy_Id { get; set; }
-        //[ForeignKey("CreatedBy_Id")]
-        //public virtual ApplicationIdentityUser CreatedBy { get; set; }
         public DateTime CreatedOnUtc { get; set; }
         public Nullable<Int32> ModifiedBy_Id { get; set; }
-        //[ForeignKey("ModifiedBy_Id")]
-        //public virtual ApplicationIdentityUser ModifiedBy { get; set; }
         public Nullable<DateTime> ModifiedOnUtc { get; set; }
         public Boolean IsDeleted { get; set; }
 

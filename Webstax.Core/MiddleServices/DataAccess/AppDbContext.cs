@@ -6,12 +6,11 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
-using System.IO;
 using System;
-using Smartwr.Webstax.Core.MiddleServices.Configuration;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Smartwr.Webstax.Core.MiddleServices.Extensions;
+using Webstax.Core.MiddleServices.Models;
 
 namespace Smartwr.Webstax.Core.MiddleServices.DataAccess
 {
@@ -30,14 +29,11 @@ namespace Smartwr.Webstax.Core.MiddleServices.DataAccess
              builder.AddJsonFile("appsettings.json");
 #endif
             Configuration = builder.Build();
-
-
         }
 
         public AppDbContext(String connectionName)
         {
             ConnectionName = connectionName;
-
             this.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
@@ -57,7 +53,24 @@ namespace Smartwr.Webstax.Core.MiddleServices.DataAccess
             return new DbContext(optionsBuilder.Options);
         }
 
-
+        private static void ApplyStateUsingIsKeySet(EntityEntry entry)
+        {
+            if (entry.IsKeySet)
+            {
+                if (((ClientChangeTracker)entry.Entity).IsDirty)
+                {
+                    entry.State = EntityState.Modified;
+                }
+                else
+                {
+                    entry.State = EntityState.Unchanged;
+                }
+            }
+            else
+            {
+                entry.State = EntityState.Added;
+            }
+        }
 
         public IEnumerable<TElement> FromSql<TElement>(string sql, params object[] parameters) where TElement : BaseEntity, new()
         {
@@ -115,6 +128,7 @@ namespace Smartwr.Webstax.Core.MiddleServices.DataAccess
 
         private void UpdateEntityState<TEntity>(TEntity entity, EntityState entityState) where TEntity : BaseEntity
         {
+            //this.ChangeTracker.TrackGraph(entity, e => ApplyStateUsingIsKeySet(e.Entry));
             var dbEntityEntry = GetDbEntityEntrySafely(entity);
             dbEntityEntry.State = entityState;
         }
